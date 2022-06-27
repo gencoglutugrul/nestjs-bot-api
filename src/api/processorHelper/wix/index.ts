@@ -31,6 +31,7 @@ const authAndCallback = async (
 
     await page.goto('https://manage.wix.com/', {
       waitUntil: 'networkidle0',
+      timeout: 60000,
     });
 
     if (page.url().startsWith('https://users.wix.com/')) {
