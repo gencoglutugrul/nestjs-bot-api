@@ -1,0 +1,47 @@
+import { getNewBrowser, getNewPage } from '../browser';
+
+import { Page } from 'puppeteer-extra-plugin/dist/puppeteer';
+import doLogin from './doLogin';
+import wixSyncReservation from './syncReservations';
+
+export const authAndCallback = async (
+  email: string,
+  password: string,
+  callback: (page: Page) => Promise<{
+    success: boolean;
+    message: string;
+  }>,
+  headless?: boolean,
+) => {
+  headless = headless || false;
+  const browser = await getNewBrowser({
+    headless,
+    userDataDir: require.main.path + '/sessions/' + email,
+  });
+  try {
+    const page = await getNewPage(browser, headless);
+
+    await page.goto('https://manage.wix.com/', {
+      waitUntil: 'networkidle0',
+    });
+
+    if (page.url().startsWith('https://users.wix.com/')) {
+      await doLogin(page, email, password);
+    }
+
+    return await callback(page);
+  } catch (err) {
+    return {
+      message: err.message,
+      success: false,
+    };
+  } finally {
+    browser.close();
+  }
+};
+
+export const syncReservations = async (
+  email: string,
+  password: string,
+  headless?: boolean,
+) => authAndCallback(email, password, wixSyncReservation, headless);
