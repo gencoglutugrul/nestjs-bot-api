@@ -4,7 +4,13 @@ import { Page } from 'puppeteer-extra-plugin/dist/puppeteer';
 import doLogin from './doLogin';
 import wixSyncReservation from './syncReservations';
 
-export const authAndCallback = async (
+export const syncReservations = async (
+  email: string,
+  password: string,
+  headless?: boolean,
+) => authAndCallback(email, password, wixSyncReservation, headless);
+
+const authAndCallback = async (
   email: string,
   password: string,
   callback: (page: Page) => Promise<{
@@ -39,9 +45,3 @@ export const authAndCallback = async (
     browser.close();
   }
 };
-
-export const syncReservations = async (
-  email: string,
-  password: string,
-  headless?: boolean,
-) => authAndCallback(email, password, wixSyncReservation, headless);
