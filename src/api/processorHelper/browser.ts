@@ -75,8 +75,7 @@ export const getNewPage = async (
   await page.setRequestInterception(true);
   page.on('request', (request) => {
     if (
-      request.url().endsWith('.png') ||
-      request.url().endsWith('.jpg') ||
+      ['image', 'font', 'media'].indexOf(request.resourceType()) !== -1 ||
       request.url().startsWith('https://manage.wix.com/analytics-ng') ||
       request
         .url()
@@ -94,7 +93,8 @@ export const getNewPage = async (
         .url()
         .startsWith(
           'https://manage.wix.com/_serverless/dealer-banners-service/v1',
-        )
+        ) ||
+      request.url().startsWith('https://frog.wix.com/sites-list')
     ) {
       request.abort();
     } else {
