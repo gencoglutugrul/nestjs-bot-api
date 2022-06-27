@@ -7,6 +7,7 @@ export default async (
   message: string;
 }> => {
   if (page.url().indexOf('/account/sites') !== -1) {
+    await page.waitForSelector('[data-hook=site-list-area-select]');
     await page.click('[data-hook=site-list-area-select]');
     await page.waitForNavigation({ waitUntil: 'networkidle0' });
   }
