@@ -1,1 +1,1 @@
-export * as Wix from './wix';
+export * as Wix from './wix/index';

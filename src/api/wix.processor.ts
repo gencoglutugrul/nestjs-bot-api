@@ -2,7 +2,7 @@ import { Process, Processor } from '@nestjs/bull';
 
 import { BotDTO } from './dto/bot.dto';
 import { Job } from 'bull';
-import { Wix } from './processorHelper/';
+import { Wix } from './processorHelper/index';
 
 @Processor('bot')
 export class WixProcessor {
