@@ -2,6 +2,7 @@ import { getNewBrowser, getNewPage } from '../browser';
 
 import { Page } from 'puppeteer-extra-plugin/dist/puppeteer';
 import doLogin from './doLogin';
+import path from 'path';
 import wixSyncReservation from './syncReservations';
 
 export const syncReservations = async (
@@ -22,8 +23,9 @@ const authAndCallback = async (
   headless = headless || false;
   const browser = await getNewBrowser({
     headless,
-    userDataDir: require.main.path + '/sessions/' + email,
+    userDataDir: path.join(process.env.SESSIONS_DIR, email),
   });
+
   try {
     const page = await getNewPage(browser, headless);
 

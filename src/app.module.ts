@@ -11,7 +11,7 @@ import { Module } from '@nestjs/common';
       validationSchema: Joi.object({
         REDIS_HOST: Joi.string().required(),
         REDIS_PORT: Joi.number().required(),
-        TWOCAPTCHA_KEY: Joi.string().required(),
+        SESSIONS_DIR: Joi.string().required(),
       }),
     }),
     BullModule.forRootAsync({
