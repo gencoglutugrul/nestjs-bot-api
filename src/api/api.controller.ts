@@ -34,23 +34,25 @@ export class ApiController {
   @Get('/result/:id')
   async getJobResult(@Param('id') id: string) {
     const job = await this.botQueue.getJob(id);
-
     if (!job) {
       throw new NotFoundException(`There is no job with id ${id}`);
     }
-
+    // TODO: Refactor
     const isCompleted = await job.isCompleted();
     const isFailed = await job.isFailed();
+
     const result = {
       isCompleted,
       isActive: await job.isActive(),
       isFailed,
       isWaiting: await job.isWaiting(),
     };
+
     if (isFailed)
       return {
         ...result,
         isCompleted: true,
+        executionTime: (job.finishedOn - job.processedOn) / 1000,
         result: {
           success: false,
           message: job.failedReason,
@@ -61,6 +63,7 @@ export class ApiController {
 
     return {
       ...result,
+      executionTime: (job.finishedOn - job.processedOn) / 1000,
       result: job.returnvalue,
     };
   }
