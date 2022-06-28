@@ -15,5 +15,5 @@ export default async (page: Page, email: string, password: string) => {
   while (await solveCaptcha(page)) {
     console.log('Captcha solution has not accepted: ' + i++);
   }
-  await page.waitForNavigation({ waitUntil: 'networkidle0' });
+  await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 58000 });
 };

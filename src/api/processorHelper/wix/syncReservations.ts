@@ -9,7 +9,7 @@ export default async (
   if (page.url().indexOf('/account/sites') !== -1) {
     await page.waitForSelector('[data-hook=site-list-area-select]');
     await page.click('[data-hook=site-list-area-select]');
-    await page.waitForNavigation({ waitUntil: 'networkidle0' });
+    await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 60000 });
   }
 
   await page.waitForSelector('a[data-hook=hotels]');
