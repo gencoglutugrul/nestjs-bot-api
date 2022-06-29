@@ -3,6 +3,7 @@ import { getNewBrowser, getNewPage } from '../browser';
 import { Page } from 'puppeteer-extra-plugin/dist/puppeteer';
 import doLogin from './doLogin';
 import path from 'path';
+import requestBlockingDecisionMaker from './blockedRequests';
 import wixSyncReservation from './syncReservations';
 
 export const syncReservations = async (
@@ -27,7 +28,11 @@ const authAndCallback = async (
   });
 
   try {
-    const page = await getNewPage(browser, headless);
+    const page = await getNewPage(
+      requestBlockingDecisionMaker,
+      browser,
+      headless,
+    );
 
     await page.goto('https://manage.wix.com/', {
       waitUntil: 'networkidle2',
@@ -36,6 +41,10 @@ const authAndCallback = async (
 
     if (page.url().startsWith('https://users.wix.com/')) {
       await doLogin(page, email, password);
+      await page.waitForNavigation({
+        waitUntil: 'networkidle2',
+        timeout: 58000,
+      });
     }
 
     return await callback(page);

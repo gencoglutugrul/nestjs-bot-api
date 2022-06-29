@@ -1,5 +1,6 @@
+import { HTTPRequest, PuppeteerLaunchOptions } from 'puppeteer';
+
 import { Browser } from 'puppeteer-extra-plugin/dist/puppeteer';
-import { PuppeteerLaunchOptions } from 'puppeteer';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import puppeteer from 'puppeteer-extra';
 
@@ -43,10 +44,12 @@ export const getNewBrowser = (options?: PuppeteerLaunchOptions) =>
   });
 
 export const getNewPage = async (
+  requestBlockingDecisionMaker?: (request: HTTPRequest) => boolean,
   browser?: Browser,
   headless?: boolean,
   userAgent?: string,
 ) => {
+  requestBlockingDecisionMaker = requestBlockingDecisionMaker || (() => false);
   browser = browser || (await getNewBrowser({ headless }));
   const [page] = await browser.pages();
   userAgent =
@@ -74,28 +77,7 @@ export const getNewPage = async (
 
   await page.setRequestInterception(true);
   page.on('request', (request) => {
-    if (
-      ['image', 'font', 'media'].indexOf(request.resourceType()) !== -1 ||
-      request.url().startsWith('https://manage.wix.com/analytics-ng') ||
-      request
-        .url()
-        .startsWith('https://manage.wix.com/_api/premium-store/v1/offering') ||
-      request
-        .url()
-        .startsWith('https://manage.wix.com/_serverless/dashboard-setup') ||
-      request
-        .url()
-        .startsWith(
-          'https://manage.wix.com/_api/dealer-offer-events-service',
-        ) ||
-      request.url().startsWith('https://sentry.wixpress.com/api/') ||
-      request
-        .url()
-        .startsWith(
-          'https://manage.wix.com/_serverless/dealer-banners-service/v1',
-        ) ||
-      request.url().startsWith('https://frog.wix.com/sites-list')
-    ) {
+    if (requestBlockingDecisionMaker(request)) {
       request.abort();
     } else {
       request.continue();
