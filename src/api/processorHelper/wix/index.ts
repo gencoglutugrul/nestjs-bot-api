@@ -54,6 +54,6 @@ const authAndCallback = async (
       success: false,
     };
   } finally {
-    browser.close();
+    await browser.close().catch(console.error);
   }
 };
