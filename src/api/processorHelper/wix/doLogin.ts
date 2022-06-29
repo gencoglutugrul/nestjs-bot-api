@@ -12,7 +12,7 @@ const ERROR_CODE_DESCRIPTIONS = {
 };
 
 const onResponseForLogin = (page: Page): Promise<any> =>
-  new Promise((resolve) => {
+  new Promise((resolve, reject) => {
     page.on('response', (response) => {
       const request = response.request();
       if (request.url().indexOf('auth/v2/login') !== -1) {
@@ -20,6 +20,7 @@ const onResponseForLogin = (page: Page): Promise<any> =>
       }
     });
     setTimeout(() => page.click('.login-btn'), 200);
+    setTimeout(() => reject('Failed to send login request.'), 10000);
   });
 
 export default async (page: Page, email: string, password: string) => {
