@@ -7,7 +7,7 @@ export const waitUntilCaptchaSolved = (
 ): Promise<string> =>
   new Promise((resolve) => {
     const intervalId = setInterval(async () => {
-      const recaptcha = await page.$('#g-recaptcha-response');
+      const recaptcha = await page.waitForSelector('#g-recaptcha-response');
       const value = await page.evaluate((el) => el.value, recaptcha);
 
       if (value.length !== 0) {
