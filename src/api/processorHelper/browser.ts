@@ -13,6 +13,7 @@ export const getNewBrowser = (options?: PuppeteerLaunchOptions) =>
       '--disable-web-security',
       '--disable-features=site-per-process',
       '--disable-features=IsolateOrigins,site-per-process',
+      '--start-fullscreen',
       '--allow-running-insecure-content',
       '--disable-blink-features=AutomationControlled',
       '--no-sandbox',
