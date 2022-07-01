@@ -24,7 +24,7 @@ You can use the setup script for easy installation. Before runing the script you
 scp /theproject/zipfile/on/local/computer/project.zip userName@yourserver.com:/home/userName
 ```
 
-Or if you upload it to Github you can clone it with github.
+Or you can upload to a git server and clone it by git.
 
 ```bash
 # unzip the project file if needed
@@ -37,7 +37,7 @@ cd project
 chmod +x ./setup.sh
 
 # start installation
-sudo ./setup.sh
+./setup.sh
 
 ```
 
