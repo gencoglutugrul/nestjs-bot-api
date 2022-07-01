@@ -13,7 +13,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "prestart:prod": "npm run build",
-    "start:prod": "DISPLAY=:20.0 node dist/main",
+    "start:prod": "node dist/main",
     "start:nohup": "nohup npm run start:prod &",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
