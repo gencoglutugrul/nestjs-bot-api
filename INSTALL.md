@@ -37,7 +37,7 @@ cd project
 chmod +x ./setup.sh
 
 # start installation
-./setup.sh
+sudo ./setup.sh
 
 ```
 
