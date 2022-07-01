@@ -1,9 +1,5 @@
-#!/bin/bash
-if [ "$#" -ne 1 ]; then
-    echo "You need to specify project directory"
-    echo "Example using: ./setup.sh /home/ubuntu/app"
-    exit
-fi
+# change dir as project directory
+cd $(dirname "$0")
 
 # update repositories
 echo "Updating the repositories"
@@ -54,7 +50,6 @@ service nginx restart
 
 # install packages and run API
 echo "Installing npm packages"
-cd $project_dir;
 npm install
 mkdir ~/sessions
 
