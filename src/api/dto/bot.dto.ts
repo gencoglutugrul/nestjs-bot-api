@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class BotDTO {
   @IsNotEmpty()
@@ -7,9 +7,11 @@ export class BotDTO {
 
   @IsNotEmpty()
   @IsString()
+  @IsEmail()
   username: string;
 
   @IsNotEmpty()
   @IsString()
+  @MinLength(4)
   password: string;
 }
