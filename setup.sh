@@ -9,16 +9,16 @@ cd $(dirname "$0")
 # update repositories
 echo "## Updating the repositories"
 curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
-apt update
+sudo apt update
 
 # install desktop environment
 echo "## Installing desktop environment"
-apt install -y xfce4
+sudo apt install -y xfce4
 
 # Install dependencies
 echo "## Installing web server"
-apt install -y nodejs nginx redis-server
-npm install -g npm
+sudo apt install -y nodejs nginx redis-server
+sudo npm install -g npm
 
 # configure nginx
 echo "## Configuring web server"
@@ -31,18 +31,18 @@ echo 'server {
 	location / {
 		proxy_pass http://127.0.0.1:3000;
 	}
-}' > /etc/nginx/sites-enabled/default
+}' | sudo tee /etc/nginx/sites-enabled/default
 
 # restart nginx
-service nginx restart
+sudo service nginx restart
 
 
 # Install chrome remote desktop
 echo "## Installing chrome remote desktop"
-apt install -y xvfb xbase-clients python3-psutil
+sudo apt install -y xvfb xbase-clients python3-psutil
 rm -rf /tmp/chrome-remote-desktop_current_amd64.deb
 wget https://dl.google.com/linux/direct/chrome-remote-desktop_current_amd64.deb -P  /tmp
-dpkg -i /tmp/chrome-remote-desktop_current_amd64.deb
+sudo dpkg -i /tmp/chrome-remote-desktop_current_amd64.deb
 
 # Authorize chrome remote desktop
 echo "##################################################"
@@ -58,15 +58,10 @@ echo ""
 echo "#################################################"
 echo "Authorizing chrome remote desktop with code: $auth_code"
 
-# find username
-user_name=$(who am i |awk '{print $1}')
-
 # generate PIN
 pin_number=$(shuf -i100000-999999 -n1)
-echo "## Username:" $user_name
-echo "## PIN:" $pin_number
-DISPLAY= /opt/google/chrome-remote-desktop/start-host --code="$auth_code" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$(hostname) --user-name=$user_name --pin=$pin_number
-echo $DISPLAY
+
+DISPLAY= /opt/google/chrome-remote-desktop/start-host --code="$auth_code" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$(hostname) --pin=$pin_number
 
 echo "#################################################"
 echo ""
@@ -97,7 +92,7 @@ echo "REDIS_PORT=6379" >> .env
 
 # starting the API
 echo "Starting up the API"
-$(npm run start:nohup)
+npm run start:nohup
 
 echo "Finished successfuly."
 exit
