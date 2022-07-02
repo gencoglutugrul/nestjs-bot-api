@@ -13,6 +13,7 @@ import { Module } from '@nestjs/common';
         REDIS_PORT: Joi.number().required(),
         SESSIONS_DIR: Joi.string().required(),
       }),
+      isGlobal: true,
     }),
     BullModule.forRootAsync({
       imports: [ConfigModule],

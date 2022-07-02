@@ -1,8 +1,9 @@
 import { HTTPRequest } from 'puppeteer';
 
-export default (request: HTTPRequest): boolean => {
+export default (request: HTTPRequest) => {
+  let shouldBlock = false;
   if (['image', 'font', 'media'].indexOf(request.resourceType()) !== -1)
-    return true;
+    shouldBlock = true;
 
   for (const url of [
     'https://apis.google.com',
@@ -38,7 +39,9 @@ export default (request: HTTPRequest): boolean => {
       request.url().startsWith(url) ||
       request.url().startsWith(url.replace('https://', 'https://www.'))
     )
-      return true;
+      shouldBlock = true;
   }
-  return false;
+
+  if (shouldBlock) request.abort();
+  else request.continue();
 };

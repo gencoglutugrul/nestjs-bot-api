@@ -18,3 +18,21 @@ export const waitUntilCaptchaSolved = (
   });
 
 export const delay = promisify(setTimeout);
+
+export const puppeteerPreventFingerprint = () => {
+  class ModifiedError extends Error {
+    constructor(message) {
+      super(message);
+      this.stack = this.stack.replace(
+        /at __puppeteer_evaluation_script__.*/gim,
+        'at (window)',
+      );
+    }
+  }
+
+  Object.defineProperty(window, 'Error', {
+    configurable: false,
+    writable: false,
+    value: ModifiedError,
+  });
+};
