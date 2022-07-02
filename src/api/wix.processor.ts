@@ -22,6 +22,7 @@ import { ConfigService } from '@nestjs/config';
 import { Inject } from '@nestjs/common';
 import { Job } from 'bull';
 import { PuppeteerLaunchOptions } from 'puppeteer';
+import { SlackService } from 'nestjs-slack';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import blockNonNecessaryWixRequests from './processorHelpers/blockNonNecessaryWixRequests';
 import { delay } from './processorHelpers/helpers';
@@ -30,6 +31,7 @@ import puppeteer from 'puppeteer-extra';
 
 @Processor('bot')
 export class WixProcessor {
+  @Inject(SlackService) private slackService: SlackService;
   @Inject(ConfigService) private configService: ConfigService;
 
   private browser: Browser;
@@ -131,6 +133,17 @@ export class WixProcessor {
     });
   }
 
+  private async sendNotification() {
+    await this.slackService.sendText(
+      'The bot encountered captcha, please visit ' +
+        'https://remotedesktop.google.com/access/' +
+        ' switch the account if needed. And solve the captcha.',
+      {
+        channel: this.configService.get('SLACK_CHANNEL'),
+      },
+    );
+  }
+
   private async doLogin(email: string, password: string) {
     await this.page.click('input[name=email]');
     await this.page.focus('input[name=email]');
@@ -147,6 +160,7 @@ export class WixProcessor {
         loginResponse.errorCode === WIX_CAPTCHA_REQUIRED ||
         loginResponse.errorCode === WIX_CAPTCHA_WRONG_ANSWER
       ) {
+        await this.sendNotification();
         await waitUntilCaptchaSolved(this.page, 500);
         await delay(200);
       } else {

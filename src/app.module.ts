@@ -12,6 +12,8 @@ import { Module } from '@nestjs/common';
         REDIS_HOST: Joi.string().required(),
         REDIS_PORT: Joi.number().required(),
         SESSIONS_DIR: Joi.string().required(),
+        SLACK_TOKEN: Joi.string().required(),
+        SLACK_CHANNEL: Joi.string().required(),
       }),
       isGlobal: true,
     }),
