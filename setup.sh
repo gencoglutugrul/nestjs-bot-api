@@ -148,7 +148,7 @@ npm run start:nohup
 clear;
 echo "## Sending test notification to slack..."
 
-curl -X POST 'https://slack.com/api/chat.postMessage' -H "Authorization: Bearer $slack_token" -H 'Content-type: application/json' --data "{\"channel\": \"$slack_channel\", \"text\": \"Your setup finished! This is a test notification. You can ignore it if you recieved.\"}"
+curl -X POST 'https://slack.com/api/chat.postMessage' -H "Authorization: Bearer $slack_token" -H 'Content-type: application/json' --data "{\"channel\": \"$slack_channel\", \"text\": \"Your setup finished! This is a test notification. You can ignore it if you recieved.\"}" | grep -c '"ok":true'
 
-echo "Finished successfuly."
+echo "\nFinished successfuly."
 exit
