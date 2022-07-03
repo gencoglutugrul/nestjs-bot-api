@@ -16,6 +16,29 @@ adduser newUser
 su newUser
 ```
 
+## CREATE SLACK APP FOR NOTIFICATION
+
+- Go to https://api.slack.com/apps
+- Login if needed
+- Click 'Create New App' button on the top right.
+- Click 'From stratch' on the popup.
+- Input a name for your app (e.g: Captcha Notifier)
+- Select workspace
+- Click 'Create App' button.
+- Click 'OAuth & Permissions' button on the sidebar.
+- Below of the 'Scopes' title, click 'Add an OAuth Scope' on below of the 'Bot Token Scopes'.
+- Type 'channels:read' and select it.
+- Type 'chat:write' and select it.
+- On same page click 'Install to Workspace' button on belof of the 'OAuth Tokens for Your Workspace' title.
+- Click allow.
+- You can now see the 'Bot User OAuth Token'.
+- Copy and note it for next steps.
+- Go to channel that you want to send notification.
+- Click 'View all members of this channel'
+- Switch to 'Integrations' tab.
+- Click 'Add an App'
+- Select the app that you created, click Add again.
+
 ## EASY INSTALL
 
 You can use the setup script for easy installation. Before runing the script you should upload the project to the server. You can do it as the following command below.
