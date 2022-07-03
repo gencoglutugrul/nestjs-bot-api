@@ -13,6 +13,7 @@ export const PUPPETEER_DEFAULT_UA =
 export const PUPPETEER_DEFAULT_OPTIONS = {
   headless: false,
   args: [
+    '--start-maximized',
     '--disable-web-security',
     '--disable-features=site-per-process',
     '--disable-features=IsolateOrigins,site-per-process',
