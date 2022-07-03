@@ -83,7 +83,7 @@ mkdir -p ~/sessions
 
 # configure env variables
 clear;
-echo "Configuring environment variables"
+echo "## Configuring environment variables"
 rm -rf .env
 
 cat /proc/$(pidof xfce4-session)/environ | tr "\0" "\n" | grep "DISPLAY" >> .env
@@ -142,8 +142,13 @@ echo "SLACK_TOKEN=$slack_token" >> .env
 echo "SLACK_CHANNEL=$slack_channel" >> .env
 
 # starting the API
-echo "Starting up the API"
+echo "## Starting up the API"
 npm run start:nohup
+
+clear;
+echo "## Sending test notification to slack..."
+
+curl -X POST 'https://slack.com/api/chat.postMessage' -H "Authorization: Bearer $slack_token" -H 'Content-type: application/json' --data "{\"channel\": \"$slack_channel\", \"text\": \"Your setup finished! This is a test notification. You can ignore it if you recieved.\"}"
 
 echo "Finished successfuly."
 exit
