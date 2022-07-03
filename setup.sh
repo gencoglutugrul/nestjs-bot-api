@@ -50,7 +50,6 @@ sudo dpkg -i /tmp/chrome-remote-desktop_current_amd64.deb
 
 # Authorize chrome remote desktop
 clear;
-echo "##################################################"
 echo "Please go https://remotedesktop.google.com/headless"
 echo "Switch your account if needed"
 echo "Click to Begin, Next, Authorize in an ordered way"
@@ -58,7 +57,6 @@ echo "Copy the command below the Debian Linux title"
 echo "Enter the command to here:"
 read remote_desktop_command;
 auth_code=$(echo $remote_desktop_command |  sed -n 's/.*--code="\([^"]*\).*/\1/p')
-echo "#################################################"
 echo "Authorizing chrome remote desktop with code: $auth_code"
 
 # generate PIN
@@ -67,7 +65,6 @@ pin_number=$(shuf -i100000-999999 -n1)
 DISPLAY= /opt/google/chrome-remote-desktop/start-host --code="$auth_code" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$(hostname) --pin=$pin_number
 
 clear;
-echo "#################################################"
 echo "Please go to https://remotedesktop.google.com/access/"
 echo "Switch your account if needed"
 echo "You should see a device named '$(hostname)' under the **Remote devices** section. Click it."
@@ -77,7 +74,6 @@ echo "Click OK button on the popup."
 echo "If it asks for the authorization, type your password and click to authenticate."
 echo "Waiting for you to complete these steps..."
 until [[ ! -z $(pidof xfce4-session) ]]; do sleep 1; done;
-echo "#################################################"
 
 # install packages and run API
 clear;
