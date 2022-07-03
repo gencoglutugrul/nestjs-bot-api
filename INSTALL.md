@@ -178,6 +178,10 @@ echo "SESSIONS_DIR=$(realpath ~/sessions/)" >> .env
 echo "REDIS_HOST=localhost" >> .env
 echo "REDIS_PORT=6379" >> .env
 
+# Specify slack token and channel
+echo "SLACK_TOKEN=xoxb-XXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXX" >> .env
+echo "SLACK_CHANNEL=#your-channel" >> .env
+
 # Start the API
 npm run start:nohup
 
