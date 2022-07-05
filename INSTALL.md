@@ -211,3 +211,14 @@ npm run start:nohup
 # Exit from the ssh
 exit
 ```
+
+### ENVIRONMENT VARIABLES
+
+- SESSIONS_DIR: full path of the directory that will store sessions
+- REDIS_HOST: Redis host
+- REDIS_PORT: Redis port
+- DISPLAY: X session id where the browser will run. It can be obtained by connecting to google remote desktop and running `echo $DISPLAY` on a terminal that is run on a graphical interface. In Linux, it is this environment variable that determines which application will run on which desktop.
+- SLACK_TOKEN: Slack token that will be used on sending notification. It should start with `xoxb`
+- SLACK_CHANNEL: Slack channel to send the message to. It can be the channel name itself, it can be #channel-name, or channel id.
+
+There is no deffault values for the environment variables. All should be setted in .env file.
