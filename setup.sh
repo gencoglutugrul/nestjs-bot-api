@@ -38,10 +38,10 @@ echo "server {
 	}
 }
 server {
-	listen   443;
-	ssl    on;
-	ssl_certificate    $project_dir/server.pem; (or bundle.crt)
-	ssl_certificate_key    $project_dir/server.key;
+	listen 443 ssl;
+
+	ssl_certificate    $project_dir/ssl/server.pem;
+	ssl_certificate_key    $project_dir/ssl/server.key;
 	server_name _;
 
 	location / {
@@ -50,12 +50,6 @@ server {
 }
 
 " | sudo tee /etc/nginx/sites-enabled/default
-
-
-# creating ssl cert
-echo "Creating SSL CERT"
-openssl req -x509 -newkey rsa:4096 -keyout server.pem -out server.pem -sha256 -days 1460 -nodes
-
 
 # restart nginx
 sudo service nginx restart

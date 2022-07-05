@@ -16,6 +16,19 @@ adduser newUser
 su newUser
 ```
 
+## SSL
+
+Create your certificate from any service. You can use self-signed ssl too. But it will be not trusted. You can create self-signed as the following command below.
+
+```bash
+mkdir ssl
+openssl req -x509 -newkey rsa:4096 -keyout ./ssl/server.key -out ./ssl/server.pem -sha256 -days 1460 -nodes
+```
+
+You can change days parameters however you want.
+
+You have to keep your certificate files in ssl folder which should be a subfolder of project folder. Or you need to change the path of the keys from nginx config manually.
+
 ## CREATE SLACK APP FOR NOTIFICATION
 
 - Go to https://api.slack.com/apps
@@ -135,6 +148,18 @@ server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
 
+	server_name _;
+
+	location / {
+		proxy_pass http://127.0.0.1:3000;
+	}
+}
+
+server {
+	listen 443 ssl;
+
+	ssl_certificate    /your/ssl/certificate/location/server.pem;
+	ssl_certificate_key    /your/ssl/certificate/location/ssl/server.key;
 	server_name _;
 
 	location / {
