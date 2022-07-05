@@ -4,7 +4,8 @@
 set -e
 
 # change dir as project directory
-cd $(dirname "$0")
+project_dir=$(dirname "$0")
+cd $project_dir
 
 # update repositories
 echo "## Updating the repositories"
@@ -25,7 +26,8 @@ sudo npm install -g npm
 # configure nginx
 clear;
 echo "## Configuring web server"
-echo 'server {
+
+echo "server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
 
@@ -34,7 +36,26 @@ echo 'server {
 	location / {
 		proxy_pass http://127.0.0.1:3000;
 	}
-}' | sudo tee /etc/nginx/sites-enabled/default
+}
+server {
+	listen   443;
+	ssl    on;
+	ssl_certificate    $project_dir/server.pem; (or bundle.crt)
+	ssl_certificate_key    $project_dir/server.key;
+	server_name _;
+
+	location / {
+		proxy_pass http://127.0.0.1:3000;
+	}
+}
+
+" | sudo tee /etc/nginx/sites-enabled/default
+
+
+# creating ssl cert
+echo "Creating SSL CERT"
+openssl req -x509 -newkey rsa:4096 -keyout server.pem -out server.pem -sha256 -days 1460 -nodes
+
 
 # restart nginx
 sudo service nginx restart
