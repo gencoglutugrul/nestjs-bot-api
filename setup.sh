@@ -36,20 +36,7 @@ echo "server {
 	location / {
 		proxy_pass http://127.0.0.1:3000;
 	}
-}
-server {
-	listen 443 ssl;
-
-	ssl_certificate    $project_dir/ssl/server.pem;
-	ssl_certificate_key    $project_dir/ssl/server.key;
-	server_name _;
-
-	location / {
-		proxy_pass http://127.0.0.1:3000;
-	}
-}
-
-" | sudo tee /etc/nginx/sites-enabled/default
+}" | sudo tee /etc/nginx/sites-enabled/default
 
 # restart nginx
 sudo service nginx restart
