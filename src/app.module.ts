@@ -5,6 +5,7 @@ import { ApiModule } from './api/api.module';
 import { BullModule } from '@nestjs/bull';
 import Joi from 'joi';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import path from 'path';
 
 @Module({
   imports: [
@@ -36,6 +37,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             return {
               type: 'sqlite',
               database: configService.get('DB_NAME'),
+              entities: [path.join(__dirname, '**', '*.entity.{ts,js}')],
+
+              // TO-DO: this is dangerous on production
+              // find another way to create automatically table schema
+              // there can be migration systems on typeorm
+              synchronize: true,
             };
             break;
 
