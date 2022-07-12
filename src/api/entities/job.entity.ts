@@ -8,7 +8,7 @@ export default class JobEntity {
   id: number;
 
   @Column({ length: 255 })
-  name: string;
+  type: string;
 
   @Column({ type: 'datetime', nullable: true })
   processedOn: Date | null;
