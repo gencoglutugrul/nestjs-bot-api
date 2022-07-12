@@ -12,12 +12,12 @@ import { BotDTO } from './dto/bot.dto';
 import { Controller } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
-import { ApiService } from './api.service';
+import { RequestRepository } from './repositories/request.repository';
 
 @Controller('api')
 export class ApiController {
-  @Inject(ApiService)
-  private readonly apiService: ApiService;
+  @Inject(RequestRepository)
+  private readonly requestRepository: RequestRepository;
 
   constructor(@InjectQueue('bot') private readonly botQueue: Queue) {}
 
@@ -38,7 +38,7 @@ export class ApiController {
   }
   @Get('/result/:id')
   async getJobResult(@Param('id') id: number) {
-    const job = await this.apiService.getJob(id);
+    const job = await this.requestRepository.getByJobId(id);
     if (!job) {
       throw new NotFoundException(`There is no job with id ${id}`);
     }
