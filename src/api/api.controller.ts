@@ -2,7 +2,6 @@ import {
   Body,
   Get,
   HttpCode,
-  Inject,
   NotFoundException,
   Param,
   Post,
@@ -12,12 +11,13 @@ import { BotDTO } from './dto/bot.dto';
 import { Controller } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
-import { RequestRepository } from './repositories/request.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import RequestEntity from './entities/request.entity';
 
 @Controller('api')
 export class ApiController {
-  @Inject(RequestRepository)
-  private readonly requestRepository: RequestRepository;
+  @InjectRepository(RequestEntity)
+  private readonly requestRepository;
 
   constructor(@InjectQueue('bot') private readonly botQueue: Queue) {}
 
@@ -38,6 +38,7 @@ export class ApiController {
   }
   @Get('/result/:id')
   async getJobResult(@Param('id') id: number) {
+    console.log(this.requestRepository.getByJobId);
     const job = await this.requestRepository.getByJobId(id);
     if (!job) {
       throw new NotFoundException(`There is no job with id ${id}`);

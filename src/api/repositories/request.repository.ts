@@ -1,13 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { DataSource } from 'typeorm';
 import RequestEntity from '../entities/request.entity';
 
-@Injectable()
-export class RequestRepository extends Repository<RequestEntity> {
-  async getByJobId(jobId: number): Promise<RequestEntity> {
-    return this.findOne({
-      where: { jobId },
-      relations: { job: true },
-    });
-  }
-}
+export const RequestRepositoryProvider = {
+  provide: 'RequestEntityRepository',
+  useFactory: (dataSource: DataSource) =>
+    dataSource.getRepository(RequestEntity).extend({
+      async getByJobId(jobId: number): Promise<RequestEntity | null> {
+        console.log(this);
+
+        return this.findOne({
+          where: { jobId },
+          relations: { job: true },
+        });
+      },
+    }),
+  inject: [DataSource],
+};
