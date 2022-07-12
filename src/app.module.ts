@@ -16,6 +16,8 @@ import path from 'path';
         SESSIONS_DIR: Joi.string().required(),
         SLACK_TOKEN: Joi.string().required(),
         SLACK_CHANNEL: Joi.string().required(),
+        DB_TYPE: Joi.string().required(),
+        DB_NAME: Joi.string().required(),
       }),
       isGlobal: true,
     }),
