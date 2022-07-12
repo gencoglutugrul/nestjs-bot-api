@@ -19,7 +19,7 @@ export default class RequestEntity {
   @Column()
   loginUrl: string;
 
-  @Column({ nullable: true })
+  @Column()
   jobId: number;
 
   @OneToOne(() => JobEntity)

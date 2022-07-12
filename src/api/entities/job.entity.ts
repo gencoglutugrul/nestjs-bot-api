@@ -11,13 +11,13 @@ export default class JobEntity {
   name: string;
 
   @Column({ type: 'datetime', nullable: true })
-  processedOn?: Date;
+  processedOn: Date | null;
 
   @Column({ type: 'datetime', nullable: true })
-  finishedOn?: Date;
+  finishedOn: Date | null;
 
   @Column({ nullable: true })
-  result?: string;
+  result: string | null;
 
   @Column({ default: false })
   isCompleted: boolean;
