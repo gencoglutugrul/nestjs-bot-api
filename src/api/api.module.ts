@@ -1,4 +1,5 @@
 import { ApiController } from './api.controller';
+import { ApiService } from './api.service';
 import { BullModule } from '@nestjs/bull';
 import { ConfigService } from '@nestjs/config';
 import JobEntity from './entities/job.entity';
@@ -25,6 +26,6 @@ import { WixProcessor } from './wix.processor';
     TypeOrmModule.forFeature([RequestEntity, JobEntity]),
   ],
   controllers: [ApiController],
-  providers: [WixProcessor],
+  providers: [ApiService, WixProcessor],
 })
 export class ApiModule {}
