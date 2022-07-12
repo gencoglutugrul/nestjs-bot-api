@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+import RequestEntity from './request.entity';
 
 @Entity()
 export default class JobEntity {
@@ -8,18 +10,21 @@ export default class JobEntity {
   @Column({ length: 255 })
   name: string;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'datetime', nullable: true })
   processedOn?: Date;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'datetime', nullable: true })
   finishedOn?: Date;
 
-  @Column()
+  @Column({ nullable: true })
   result?: string;
 
-  @Column()
+  @Column({ default: false })
   isCompleted: boolean;
 
-  @Column()
+  @Column({ default: false })
   isFailed: boolean;
+
+  @OneToOne(() => RequestEntity)
+  request: RequestEntity;
 }

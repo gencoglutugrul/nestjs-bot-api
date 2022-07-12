@@ -1,4 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import JobEntity from './job.entity';
+
 @Entity()
 export default class RequestEntity {
   @PrimaryGeneratedColumn()
@@ -9,4 +18,11 @@ export default class RequestEntity {
 
   @Column()
   loginUrl: string;
+
+  @Column({ nullable: true })
+  jobId: number;
+
+  @OneToOne(() => JobEntity)
+  @JoinColumn()
+  job: JobEntity;
 }
