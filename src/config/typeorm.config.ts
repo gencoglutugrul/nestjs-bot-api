@@ -1,6 +1,5 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 
-import { AddPasswordToRequestEntity1657708756844 } from 'src/migrations/1657708756844-AddPasswordToRequestEntity';
 import { Initial1657698016998 } from 'src/migrations/1657698016998-initial';
 import JobEntity from 'src/entities/job.entity';
 import { NotImplementedException } from '@nestjs/common';
@@ -10,7 +9,7 @@ import { registerAs } from '@nestjs/config';
 export const getTypeORMOptions = (): DataSourceOptions => {
   const generalOptions = {
     entities: [RequestEntity, JobEntity],
-    migrations: [Initial1657698016998, AddPasswordToRequestEntity1657708756844],
+    migrations: [Initial1657698016998],
     synchronize: false,
   };
 
