@@ -16,6 +16,10 @@ export default class RequestEntity {
   @Column()
   username: string;
 
+  // TO-DO: password should stored as encrypted
+  @Column()
+  password: string;
+
   @Column()
   loginUrl: string;
 
