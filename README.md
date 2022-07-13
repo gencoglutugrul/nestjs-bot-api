@@ -1,11 +1,10 @@
-[FOR INSTALLATION GUIDE CHECK INSTALL.md](INSTALL.md)
+[FOR DEPLOYMENT GUIDE CHECK INSTALL.md](INSTALL.md)
 
-TODOS:
+# TO INSTALL ON LOCAL
 
-DONE:
-
-- update setup script for slack env variables
-- Need a Notification module to send notification whenever we encounter with captcha
-- Installation guide needs to be improved
-- Script for installation automatization
-- POST data validation needs to be as same as Wix input validation.
+```
+npm install
+docker compose up -d
+cp .env.example .env
+npm run start:dev
+```
