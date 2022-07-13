@@ -1,11 +1,11 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Module, NotImplementedException } from '@nestjs/common';
 
 import { ApiModule } from './api/api.module';
 import { BullModule } from '@nestjs/bull';
 import Joi from 'joi';
-import { SqliteConnectionOption } from './config/typeorm.config';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import typeormConfig from './config/typeorm.config';
 
 @Module({
   imports: [
@@ -19,7 +19,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         DB_TYPE: Joi.string().required(),
         DB_NAME: Joi.string().required(),
       }),
+      expandVariables: true,
       isGlobal: true,
+      load: [typeormConfig],
     }),
     BullModule.forRootAsync({
       imports: [ConfigModule],
@@ -32,19 +34,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
-        if (configService.get('DB_TYPE') === 'sqlite')
-          return SqliteConnectionOption;
-        // TO-DO: Implement cases for other database solutions.
-        else
-          throw new NotImplementedException(
-            'There is no implementation other than SQLite!',
-          );
-      },
       inject: [ConfigService],
+      useFactory(configService: ConfigService) {
+        return configService.getOrThrow('orm');
+      },
     }),
-
     ApiModule,
   ],
   controllers: [],
