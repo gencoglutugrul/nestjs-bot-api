@@ -1,8 +1,12 @@
 import { ApiController } from './api.controller';
 import { BullModule } from '@nestjs/bull';
 import { ConfigService } from '@nestjs/config';
+import JobEntity from '../entities/job.entity';
 import { Module } from '@nestjs/common';
+import RequestEntity from '../entities/request.entity';
+import { RequestRepository } from 'src/repositories/request.repository';
 import { SlackModule } from 'nestjs-slack';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { WixProcessor } from './wix.processor';
 
 @Module({
@@ -19,8 +23,9 @@ import { WixProcessor } from './wix.processor';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([RequestEntity, JobEntity]),
   ],
   controllers: [ApiController],
-  providers: [WixProcessor],
+  providers: [RequestRepository, WixProcessor],
 })
 export class ApiModule {}

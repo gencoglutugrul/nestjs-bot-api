@@ -2,6 +2,7 @@ import {
   Body,
   Get,
   HttpCode,
+  Inject,
   NotFoundException,
   Param,
   Post,
@@ -11,9 +12,13 @@ import { BotDTO } from './dto/bot.dto';
 import { Controller } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
+import { RequestRepository } from 'src/repositories/request.repository';
 
 @Controller('api')
 export class ApiController {
+  @Inject(RequestRepository)
+  private readonly requestRepository: RequestRepository;
+
   constructor(@InjectQueue('bot') private readonly botQueue: Queue) {}
 
   @Post('/start-bot')
@@ -32,39 +37,11 @@ export class ApiController {
     }
   }
   @Get('/result/:id')
-  async getJobResult(@Param('id') id: string) {
-    const job = await this.botQueue.getJob(id);
-    if (!job) {
+  async getJobResult(@Param('id') id: number) {
+    const job = await this.requestRepository.getByJobId(id);
+    if (null === job) {
       throw new NotFoundException(`There is no job with id ${id}`);
     }
-    // TODO: Refactor
-    const isCompleted = await job.isCompleted();
-    const isFailed = await job.isFailed();
-
-    const result = {
-      isCompleted,
-      isActive: await job.isActive(),
-      isFailed,
-      isWaiting: await job.isWaiting(),
-    };
-
-    if (isFailed)
-      return {
-        ...result,
-        isCompleted: true,
-        executionTime: (job.finishedOn - job.processedOn) / 1000,
-        result: {
-          success: false,
-          message: job.failedReason,
-        },
-      };
-
-    if (!isCompleted) return result;
-
-    return {
-      ...result,
-      executionTime: (job.finishedOn - job.processedOn) / 1000,
-      result: job.returnvalue,
-    };
+    return job;
   }
 }

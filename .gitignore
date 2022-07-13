@@ -32,4 +32,4 @@ lerna-debug.log*
 .env
 sessions
 runAllAccounts.sh
-Wix JWT Structure.md
+sqlite.db
