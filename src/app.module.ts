@@ -4,8 +4,8 @@ import { Module, NotImplementedException } from '@nestjs/common';
 import { ApiModule } from './api/api.module';
 import { BullModule } from '@nestjs/bull';
 import Joi from 'joi';
+import { SqliteConnectionOption } from './config/typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import path from 'path';
 
 @Module({
   imports: [
@@ -34,27 +34,13 @@ import path from 'path';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        switch (configService.get('DB_TYPE')) {
-          case 'sqlite':
-            return {
-              type: 'sqlite',
-              database: configService.get('DB_NAME'),
-              entities: [path.join(__dirname, '**', '*.entity.{ts,js}')],
-
-              // TO-DO: this is dangerous on production
-              // find another way to create automatically table schema
-              // there can be migration systems on typeorm
-              synchronize: true,
-            };
-            break;
-
-          default:
-            // TO-DO: Implement cases for other database solutions.
-            throw new NotImplementedException(
-              'There is no implementation other than SQLite!',
-            );
-            break;
-        }
+        if (configService.get('DB_TYPE') === 'sqlite')
+          return SqliteConnectionOption;
+        // TO-DO: Implement cases for other database solutions.
+        else
+          throw new NotImplementedException(
+            'There is no implementation other than SQLite!',
+          );
       },
       inject: [ConfigService],
     }),
