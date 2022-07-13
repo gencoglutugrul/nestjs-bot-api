@@ -39,7 +39,7 @@ export class ApiController {
   @Get('/result/:id')
   async getJobResult(@Param('id') id: number) {
     const job = await this.requestRepository.getByJobId(id);
-    if (!job) {
+    if (null === job) {
       throw new NotFoundException(`There is no job with id ${id}`);
     }
     return job;
