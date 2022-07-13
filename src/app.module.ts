@@ -4,8 +4,8 @@ import { ApiModule } from './api/api.module';
 import { BullModule } from '@nestjs/bull';
 import Joi from 'joi';
 import { Module } from '@nestjs/common';
+import TypeORMConfig from './config/typeorm.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import typeormConfig from './config/typeorm.config';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import typeormConfig from './config/typeorm.config';
       }),
       expandVariables: true,
       isGlobal: true,
-      load: [typeormConfig],
+      load: [TypeORMConfig],
     }),
     BullModule.forRootAsync({
       imports: [ConfigModule],
